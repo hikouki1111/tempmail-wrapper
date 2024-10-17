@@ -84,13 +84,17 @@ func (a *Account) GetMailbox() ([]Mail, error) {
 			BodyText:    eJ.BodyText,
 			BodyHTML:    eJ.BodyHTML,
 			CreatedAt:   eJ.CreatedAt,
-			Attachments: make([]map[string]string, 0),
+			Attachments: make([]Attachment, 0),
 		}
 
 		if len(eJ.Attachments) > 0 {
-			var attachments []map[string]string
+			var attachments []Attachment
 			for _, aJ := range eJ.Attachments {
-				attachments = append(attachments, map[string]string{aJ.Name: attachmentURL(aJ.ID)})
+				attachments = append(attachments, Attachment{
+					Name: aJ.Name,
+					URL:  attachmentURL(aJ.ID),
+					Size: aJ.Size,
+				})
 			}
 			mail.Attachments = attachments
 		}

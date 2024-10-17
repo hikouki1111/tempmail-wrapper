@@ -8,5 +8,5 @@ type Mail struct {
 	BodyText    string
 	BodyHTML    string
 	CreatedAt   string
-	Attachments []map[string]string
+	Attachments []Attachment
 }
