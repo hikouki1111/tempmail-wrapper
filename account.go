@@ -3,6 +3,8 @@ package tempmail_wrapper
 import (
     "bytes"
     "encoding/json"
+    "log"
+
     requests "github.com/RabiesDev/request-helper"
     "github.com/samber/lo"
     "github.com/tidwall/gjson"
@@ -58,11 +60,19 @@ type emailJson struct {
 }
 
 func (a *Account) GetMailbox() ([]Mail, error) {
-    req := requests.Get(mailboxURL("dlwnmxv7nl@gonetor.com"))
+    req := requests.Get(mailboxURL(a.Email))
     body, _, err := requests.DoAndReadString(client, req)
+    if err != nil {
+        log.Println(err)
+        return nil, err
+    }
 
     var emailJsons []emailJson
     err = json.Unmarshal([]byte(body), &emailJsons)
+    if err != nil {
+        log.Println(err)
+        return nil, err
+    }
 
     var mailSlice []Mail
     for _, eJ := range emailJsons {
@@ -88,5 +98,5 @@ func (a *Account) GetMailbox() ([]Mail, error) {
         mailSlice = append(mailSlice, mail)
     }
 
-    return mailSlice, err
+    return mailSlice, nil
 }
