@@ -1,2 +1,2 @@
 # tempmail-wrapper
-wrapper of [temp-mail.io](https://temp-mail.io)
+Wrapper of [temp-mail.io](https://temp-mail.io) api
