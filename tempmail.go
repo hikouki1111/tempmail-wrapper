@@ -6,8 +6,7 @@ import (
 )
 
 var (
-    client     = &http.Client{}
-    jsonHeader = map[string]string{"Content-Type": "application/json;charset=utf-8"}
+    client = &http.Client{}
 
     baseURL       = "https://api.internal.temp-mail.io/api/v3"
     newAccountURL = fmt.Sprintf("%s/email/new", baseURL)

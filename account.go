@@ -20,9 +20,9 @@ func NewAccount() (*Account, error) {
 		"max_name_length": 10,
 		"min_name_length": 10,
 	}
-	req := requests.Post(newAccountURL, bytes.NewReader(lo.Must(json.Marshal(payload))))
-	requests.SetHeaders(req, jsonHeader)
-	body, _, err := requests.DoAndReadString(client, req)
+	req := requests.MustPost(newAccountURL, bytes.NewReader(lo.Must(json.Marshal(payload))))
+	req.Header.Set("Content-Type", "application/json;charset=utf-8")
+	body, _, err := requests.ReadString(client, req)
 
 	return &Account{
 		Email: gjson.Get(body, "email").String(),
@@ -34,9 +34,9 @@ func (a *Account) Delete() error {
 	payload := map[string]interface{}{
 		"token": a.Token,
 	}
-	req := requests.Delete(controlURL(a.Email), bytes.NewReader(lo.Must(json.Marshal(payload))))
-	requests.SetHeaders(req, jsonHeader)
-	_, err := requests.Do(client, req)
+	req := requests.MustDelete(controlURL(a.Email), bytes.NewReader(lo.Must(json.Marshal(payload))))
+	req.Header.Set("Content-Type", "application/json;charset=utf-8")
+	_, err := client.Do(req)
 
 	return err
 }
@@ -60,8 +60,8 @@ type emailJson struct {
 }
 
 func (a *Account) GetMailbox() ([]Mail, error) {
-	req := requests.Get(mailboxURL(a.Email))
-	body, _, err := requests.DoAndReadString(client, req)
+	req := requests.MustGet(mailboxURL(a.Email))
+	body, _, err := requests.ReadString(client, req)
 	if err != nil {
 		log.Println(err)
 		return nil, err
